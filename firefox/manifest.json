@@ -5,7 +5,7 @@
 
   "content_scripts": [
     {
-      "matches": ["*://api.unrealengine.com/*"],
+      "matches": ["*://api.unrealengine.com/*", "*://docs.unrealengine.com/*"],
       "js": ["convert_ue_links.js"]
     }
   ],
