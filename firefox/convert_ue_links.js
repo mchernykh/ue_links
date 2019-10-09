@@ -61,7 +61,7 @@ function onError(error) {
 }
 
 function onGot(result) {
-  var path = result[Object.keys(result)[0]] || "https://github.com/EpicGames/UnrealEngine/blob/release/Engine/Source/";
+  var path = result[Object.keys(result)[0]] || "https://github.com/EpicGames/UnrealEngine/blob/release";
 
   change_links = function () {
     var references = document.getElementById('references');
@@ -74,26 +74,25 @@ function onGot(result) {
       var address = paragraph.innerHTML;
 
       var address_prefix = path;
-      address_with_slashes = address.replace('&#47;', '/');
-      var h_address = address_prefix + address_with_slashes;       
-      paragraph.innerHTML = '<a id="header_id_for_clipboard" href="' + h_address + '">' + address + '</a>';
-      // paragraph.innerHTML = '<button onclick="copyTextToClipboard(\'' + address_with_slashes + '\')">Copy</button> ' + paragraph.innerHTML;
-      
-      if (links.length == 4) {
-        var cpp_address = h_address.substring(0, h_address.length - 1) + 'cpp';
-        cpp_address = cpp_address.replace('/Public/', '/Private/');
-        cpp_address = cpp_address.replace('/Classes/', '/Private/');
-        paragraph.innerHTML = paragraph.innerHTML + ' <a href="' + cpp_address + '">cpp?</a>';
+      var address_with_slashes = address.replace('&#47;', '/');
+      if (address_with_slashes.startsWith('/Engine')) {
+        var repo_address = address_prefix + address_with_slashes;
+        var id_text = 'id="header_id_for_clipboard" ';
+	if (address_with_slashes.endsWith('.h')) {
+          paragraph.innerHTML = '<a id="header_id_for_clipboard" href="' + repo_address + '">' + address + '</a>';
+          var inputElement = document.createElement('input');
+          inputElement.type = "button";
+          inputElement.value = "Copy";
+          address_to_copy = address_with_slashes.replace('/Engine/Source/', ''); 
+          inputElement.addEventListener('click', function(){
+            copyTextToClipboard(address_to_copy);
+          });
+
+          paragraph.insertBefore(inputElement, paragraph.firstChild);
+        } else {
+          paragraph.innerHTML = '<a href="' + repo_address + '">' + address + '</a>';
+        }
       }
-
-      var inputElement = document.createElement('input');
-      inputElement.type = "button";
-      inputElement.value = "Copy";
-      inputElement.addEventListener('click', function(){
-        copyTextToClipboard(address_with_slashes);
-      });
-
-      paragraph.insertBefore(inputElement, paragraph.firstChild);
     }
   };
 

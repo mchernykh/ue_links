@@ -8,7 +8,7 @@ function saveOptions(e) {
 function restoreOptions() {
 
   function setCurrentChoice(result) {
-    document.querySelector("#uepath").value = result[Object.keys(result)[0]] || "https://github.com/EpicGames/UnrealEngine/blob/release/Engine/Source/";
+    document.querySelector("#uepath").value = result[Object.keys(result)[0]] || "https://github.com/EpicGames/UnrealEngine/blob/release";
   }
 
   function onError(error) {
